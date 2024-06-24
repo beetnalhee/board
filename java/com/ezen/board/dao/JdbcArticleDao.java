@@ -15,7 +15,12 @@ public class JdbcArticleDao implements ArticleDao {
 
     private ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
 
-    // JdbcMemberDao 에서 복붙해오고 수정하기
+    /**
+     * 게시판 게시글 리스트 출력기능 구현하기
+     * 
+     * @return 각 게시판 리스트
+     * @throws SQLException
+     */
     @Override
     public List<Board> findByBoardAll() throws SQLException {
         List<Board> list = new ArrayList<>(); // 목록이니까 리스트로 받는다
@@ -49,8 +54,15 @@ public class JdbcArticleDao implements ArticleDao {
         }
         return list; // 담은 목록 반환
     }
+    
 
-    // 동적으로 바뀌는 부분만 바인딩 변수(?)로 바꾸기
+    /**
+     * 게시글 신규 작성기능 구현
+     * 동적으로 바뀌는 부분만 바인딩 변수(?)로 바꾸기
+     * 
+     * @param article
+     * @throws SQLException
+     */
     @Override
     public void createArticle(Article article) throws SQLException {
         StringBuilder sql = new StringBuilder();
@@ -76,6 +88,11 @@ public class JdbcArticleDao implements ArticleDao {
         }
     }
 
+    /**
+     * ㅁ댓글 작성기능 구현
+     * @param article
+     * @throws SQLException
+     */
     @Override
     public void createComment(Article article) throws SQLException {
         StringBuilder sql = new StringBuilder();
@@ -107,7 +124,6 @@ public class JdbcArticleDao implements ArticleDao {
         }
     }
 
-    //----------------주석업뎃필요-------------------
 
     /**
      * 게시글 전체 목록 및 검색유형에 따른 게시글 목록 반환
@@ -227,7 +243,14 @@ public class JdbcArticleDao implements ArticleDao {
     }
 
 
-    // 검색조건에 따라 검색되는 페이징 갯수가 달라지는 기능구현
+    /**
+     * 검색조건에 따라 검색되는 페이징 갯수가 달라지는 기능구현
+     *
+     * @param type 검색 유형
+     * @param value 검색 값
+     * @return 검색 목록
+     * @throws SQLException
+     */
     @Override
     public int findByArticleCount(String type, String value) throws SQLException {
         int count = 0;
@@ -308,8 +331,14 @@ public class JdbcArticleDao implements ArticleDao {
         return count;
     }
 
-    //--------------------------------0402-----------------------------------------------------------------------------------
-    @Override                         // articleId ? article_id ?
+
+    /**
+     * 게시글 상세보기
+     * @param articleId 각 게시글
+     * @return 게시글 상세
+     * @throws SQLException
+     */
+    @Override
     public Article readContent(int articleId) throws SQLException {
         Article article = null;
         StringBuilder sql = new StringBuilder();
@@ -334,7 +363,6 @@ public class JdbcArticleDao implements ArticleDao {
                 article.setOrderNo(rs.getInt("order_no"));
                 article.setLevelNo(rs.getInt("level_no"));
                 article.setGroupNo(rs.getInt("group_no"));
-
             }
         } finally {
             try {
@@ -345,12 +373,14 @@ public class JdbcArticleDao implements ArticleDao {
                 throw new RuntimeException(e);
             }
         }
-        return article; // 담은 목록 반환
-
-
+        return article;
     }
 
-
+    /**
+     * 게시글 조회수 카운트기능 구현
+     * @param articleId 각 게시글
+     * @throws SQLException
+     */
     @Override
     public void updateArticleHitCount(int articleId) throws SQLException {
         StringBuilder sql = new StringBuilder();
@@ -373,68 +403,9 @@ public class JdbcArticleDao implements ArticleDao {
         }
     }
 
-// // 시퀀스 수정 (사용법 모름 )
-//    public void test() throws SQLException {
-//        StringBuilder sql = new StringBuilder();
-//        sql.append(" SELECT article_id_seq.nextval from dual");
-//        Connection con = connectionFactory.getConnection();
-//        PreparedStatement pstmt = null;
-//        ResultSet rs = null;
-//        try {
-//            pstmt = con.prepareStatement(sql.toString());
-//            pstmt.executeQuery();
-//            System.out.println("실행");
-//        } finally {
-//            try {
-//                if (pstmt != null) pstmt.close();
-//                if (rs != null) rs.close();
-//                if (con != null) con.close();
-//            } catch (SQLException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//    }
 
     public static void main(String[] args) throws SQLException {
         ArticleDao articleDao = new JdbcArticleDao();
-
-//        // 신규등록 간이 테스트
-        Article article = new Article();
-//        article.setBoardId(10);
-//        article.setWriter("banana");
-//        article.setTitle("살려주세요.");
-//        article.setContent("월요병에걸렸습니다.");
-//        article.setPasswd("1111");
-//
-//        articleDao.createArticle(article);
-//        System.out.println("신규등록완료..");
-
-//        System.out.println(articleDao.findByBoardAll());
-
-//        페이지별 목록 조회 간이 테스트
-//        int rowCount = 20;
-//        int requestPage = 2;
-//        String type = "t";
-//        String value = "살려";
-//        List<Article> list = articleDao.findByAll(rowCount, requestPage, type, value);
-//        System.out.println("게시글 목록 갯수 :" + list.size());
-//        for (Article article : list) {
-//            System.out.println(article);
-
-        // 전체검색
-//        System.out.println(articleDao.findByArticleCount("w","salmon"));
-
-        // 글상세보기
-//        System.out.println(articleDao.readContent(3082));
-
-//         // 시퀀스 수정
-//        JdbcArticleDao dao = new JdbcArticleDao();
-//        for (int i = 0; i <3600 ; i++) {
-//            dao.test();
-//        }
-//        }
-
-
         articleDao.createComment(article);
         System.out.println("완료");
 
