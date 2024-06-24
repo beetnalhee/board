@@ -7,7 +7,7 @@ jsp를 활용한 게시판 구현
 
 <img src="https://github.com/beetnalhee/board/assets/151362604/628de603-b0a8-49f9-a608-87d8e5dc04fe" width="500" height="180"/></br>
 
-> * [코드보기](https://github.com/beetnalhee/project_secondHalf/blob/main/src/main/java/com/ezen/springmvc/web/map/controller/MapController.java)
+> * [코드보기](https://github.com/beetnalhee/project_secondHalf/blob/main/src/main/java/com/ezen/springmvc/web/map/controller/MapController.java) ---수정
 </br>
 
 # 📚 개발환경 및 사용기술
